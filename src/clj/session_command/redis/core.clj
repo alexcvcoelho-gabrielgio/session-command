@@ -4,7 +4,7 @@
             [clojure.data.json :as json]
             [taoensso.carmine :as car :refer (wcar)]))
 
-(defmacro wcar* [& body] `(car/wcar {:pool {} :spec {:host (-> env :redis-url) :port 6379}} ~@body))
+(defmacro wcar* [& body] `(car/wcar {:pool {} :spec {:host (env :redis-url) :port 6379}} ~@body))
 
 (defn any-nil-empty? [lst]
   (let [values (if (map? lst) (vals lst) lst)]
