@@ -34,7 +34,8 @@
                     {session-id :- String nil}]
       :summary "Broadcast a warning signal"
       (let [rtn (redis/push-warn {:command    "warn"
-                                  :session-id session-id})]
+                                  :session-id session-id
+                                  :action action})]
         (if (nil? (:error rtn))
           (ok)
           (bad-request "Invalid params"))))))

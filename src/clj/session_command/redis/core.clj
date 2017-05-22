@@ -26,5 +26,5 @@
   (if (any-nil-empty? session)
     {:error "Value can be null"}
     (do
-      (wcar* (car/lpush "warn" (json/write-str session)))
+      (wcar* (car/lpush "session" (json/write-str session)))
       {:data ""})))
