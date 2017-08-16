@@ -26,6 +26,7 @@
                  [ring/ring-core "1.6.0"]
                  [ring/ring-defaults "0.3.0"]
                  [selmer "1.10.7"]
+                 [spootnik/kinsky "0.1.16"]
                  [com.taoensso/carmine "2.16.0"]
                  [org.clojure/data.json "0.2.6"]]
 
