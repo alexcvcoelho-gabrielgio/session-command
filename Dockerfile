@@ -1,8 +1,5 @@
-FROM java:8-alpine
-MAINTAINER Your Name <you@example.com>
-
-ADD target/uberjar/session-command.jar /session-command/app.jar
-
+FROM java:8-jre
+COPY ./target/uberjar/ /usr/src/app
+WORKDIR /usr/src/app
 EXPOSE 3000
-
-CMD ["java", "-jar", "/session-command/app.jar"]
+CMD java -jar session-command.jar
