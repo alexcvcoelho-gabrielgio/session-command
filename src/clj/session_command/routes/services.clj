@@ -2,7 +2,7 @@
   (:require [ring.util.http-response :refer :all]
             [compojure.api.sweet :refer :all]
             [schema.core :as s]
-            [session-command.redis.core :as redis]))
+            [session-command.kafka.core :as redis]))
 
 (defapi service-routes
   {:swagger {:ui   "/swagger-ui"

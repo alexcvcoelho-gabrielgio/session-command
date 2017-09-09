@@ -1,21 +1,19 @@
-# session-command
+# Session-command
 
-generated using Luminus version "2.9.11.53"
+Session-commands adds commands into event source pipeline.
 
-FIXME
-
-## Prerequisites
-
-You will need [Leiningen][1] 2.0 or above installed.
-
-[1]: https://github.com/technomancy/leiningen
+This webapi simply enqueue a command into kafka to be processed by a robot.
 
 ## Running
 
-To start a web server for the application, run:
+To run it needs to connect with kafka. In near future we will create a a docker-compose or a makefile to made this easier but for now it is something like this:
+```
+KAFKA="localhot:9092" \
+lein run
+```
 
-    lein run
+This is not the only way to setup env variables for more info check [environ](https://github.com/weavejester/environ#usage).
 
 ## License
 
-Copyright © 2017 FIXME
+Copyright © 2017 alexcvcoelho and gabrielgio

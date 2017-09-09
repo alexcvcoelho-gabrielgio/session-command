@@ -19,3 +19,4 @@ profiles.clj
 Capstanfile
 session-command.iml
 /log/
+*.iml
