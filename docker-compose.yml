@@ -1,0 +1,33 @@
+version: '3'
+services:
+  session-command:
+      container_name: "session-command"
+      environment:
+        - KAFKA=gabrielgio.com.br:9092
+      image: registry.gitlab.com/gabrielgio/session-command:0.0.1
+      ports:
+        - "3000:3000"
+
+  tracker-command:
+    container_name: "tracker-command"
+    environment:
+      - KAFKA=gabrielgio.com.br:9092
+    image: registry.gitlab.com/gabrielgio/tracker-command:0.0.1
+    ports:
+      - "3001:3000"
+
+  session-query:
+    container_name: "session-query"
+    environment:
+      - MONGO=mongodb://remote:remote@gabrielgio.com.br:27017/main
+    image: registry.gitlab.com/gabrielgio/session-query:0.0.1
+    ports:
+      - "3002:3000"
+
+  session-worker-1:
+    container_name: "session-worker-1"
+    environment:
+      - KAFKA=gabrielgio.com.br:9092
+      - MONGO=mongodb://remote:remote@gabrielgio.com.br:27017/main
+      - DATOMIC=datomic:sql://main?jdbc:mysql://gabrielgio.com.br:3306/datomic?user=remote&password=remote
+    image: registry.gitlab.com/gabrielgio/session-worker:0.0.1
