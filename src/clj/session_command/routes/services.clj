@@ -69,5 +69,5 @@
       :summary "Get session information"
       (let [rtn (db/get-session session-id)]
         (if (nil? (:error rtn))
-          (ok rtn)
+          (ok (dissoc (first rtn) :_id :command))
           (bad-request "Invalid params"))))))

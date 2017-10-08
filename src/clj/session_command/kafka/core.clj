@@ -40,4 +40,4 @@
 (defn push-track [track]
   (if (any-nil-empty? track)
     {:error "value cannot be null"}
-    (client/send! conn-tracking track)))
+    (client/send! conn-tracking "track" :track track)))
