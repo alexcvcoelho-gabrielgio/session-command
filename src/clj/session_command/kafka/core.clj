@@ -5,39 +5,26 @@
             [jkkramer.verily :as v]))
 
 (def s-validate (v/validations->fn [[:required [:brand :model :hd-id :command :uuid]]]))
+(def t-validate (v/validations->fn [[:required [:session-id :gas-lvl :lat :long :vel]]]))
+(def w-validate (v/validations->fn [[:required [:session-id :action]]]))
 
-(mount.core/defstate conn-session
+(mount.core/defstate conn
                      :start (client/producer {:bootstrap.servers (env :kafka)}
                                              (client/keyword-serializer)
                                              (client/edn-serializer))
-                     :stop (client/close! conn-session))
-
-(mount.core/defstate conn-tracking
-                     :start (client/producer {:bootstrap.servers (env :kafka)}
-                                             (client/keyword-serializer)
-                                             (client/edn-serializer))
-                     :stop (client/close! conn-tracking))
-
-(defn any-nil-empty? [lst]
-  (let [values (if (map? lst) (vals lst) lst)]
-    (loop [v (first values) rst (rest values)]
-      (if (or (= v nil) (= v ""))
-        true
-        (if (empty? rst)
-          false
-          (recur (first rst) (rest rst)))))))
+                     :stop (client/close! conn))
 
 (defn push-session [session]
   (if (s-validate session)
-    (client/send! conn-session "session" :session session)
+    (client/send! conn "session" :session session)
     {:error "Value can be null"}))
 
-(defn push-warn [session]
-  (if (any-nil-empty? session)
-    {:error "Value cannot be null"}
-    (client/send! conn-session "session-warn" :session session)))
+(defn push-warn [warn]
+  (if (w-validate warn)
+    (client/send! conn "warn-warn" :session warn)
+    {:error "Value cannot be null"}))
 
 (defn push-track [track]
-  (if (any-nil-empty? track)
-    {:error "value cannot be null"}
-    (client/send! conn-tracking "track" :track track)))
+  (if (t-validate track)
+    (client/send! conn "track" :track track)
+    {:error "value cannot be null"}))

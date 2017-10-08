@@ -11,4 +11,4 @@
           :stop (mg/disconnect db))
 
 (defn get-session [id]
-  (mc/find-maps (:db db) "session" {:uuid id}))
+  (mc/find-one-as-map (:db db) "session" {:uuid id}))
