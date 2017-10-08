@@ -2,14 +2,15 @@
   (:require [ring.util.http-response :refer :all]
             [compojure.api.sweet :refer :all]
             [schema.core :as s]
-            [session-command.kafka.core :as redis]))
+            [session-command.db.core :as db]
+            [session-command.kafka.core :as kafka]))
 
 (defapi service-routes
-  {:swagger {:ui   "/swagger-ui"
+  {:swagger {:ui   "/swagger"
              :spec "/swagger.json"
              :data {:info {:version     "0.0.1"
                            :title       "Session API"
-                           :description "Supply function to command and query session domain"}}}}
+                           :description "Supply function to command and query session and track domain"}}}}
   (context "/api" []
     :tags ["session"]
 
@@ -20,7 +21,7 @@
                     {hd-id :- String nil}]
       :summary "Creates a new session"
       (let [uuid (str (java.util.UUID/randomUUID))
-            rtn (redis/push-session {:command "create_session"
+            rtn (kafka/push-session {:command "create_session"
                                      :brand   brand
                                      :model   model
                                      :hd-id   hd-id
@@ -36,7 +37,7 @@
                     {vel :- Double 0}
                     {gas-lvl :- Double 0}]
       :summary "Create a new session"
-      (let [rtn (redis/push-track {:command    "track"
+      (let [rtn (kafka/push-track {:command    "track"
                                    :lat        lat
                                    :long       long
                                    :vel        vel
@@ -45,7 +46,6 @@
         (if (nil? (:error rtn))
           (ok)
           (bad-request "Invalid params"))))
-
 
     (POST "/" []
       :query-params [id :- String]
@@ -57,9 +57,17 @@
       :body-params [{action :- String nil}
                     {session-id :- String nil}]
       :summary "Broadcast a warning signal"
-      (let [rtn (redis/push-warn {:command    "warn"
+      (let [rtn (kafka/push-warn {:command    "warn"
                                   :session-id session-id
                                   :action     action})]
         (if (nil? (:error rtn))
           (ok)
+          (bad-request "Invalid params"))))
+
+    (GET "/:session-id" []
+      :path-params [{session-id :- String nil}]
+      :summary "Get session information"
+      (let [rtn (db/get-session session-id)]
+        (if (nil? (:error rtn))
+          (ok (dissoc (first rtn) :_id :command))
           (bad-request "Invalid params"))))))

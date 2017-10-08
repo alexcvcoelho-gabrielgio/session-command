@@ -6,7 +6,8 @@
             [session-command.config :refer [env]]))
 
 
-(defstate db :star (mg/connect-via-uri (env :mongo))
+(defstate db
+          :start (mg/connect-via-uri (env :mongo))
           :stop (mg/disconnect db))
 
 (defn get-session [id]
