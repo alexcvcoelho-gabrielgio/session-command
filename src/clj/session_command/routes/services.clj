@@ -64,6 +64,13 @@
           (ok)
           (bad-request "Invalid params"))))
 
+    (GET "/active" []
+      :summary "Get all acitive sessions"
+      (let [rtn (db/get-active)]
+        (if (nil? (:error rtn))
+          (ok (map #(dissoc % :_id :command) rtn))
+          (bad-request "Invalid params"))))
+
     (GET "/:session-id" []
       :path-params [{session-id :- String nil}]
       :summary "Get session information"
