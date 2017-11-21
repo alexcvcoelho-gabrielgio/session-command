@@ -18,4 +18,4 @@
   (with-collection (:db db) "session"
                    (find {})
                    (sort (array-map :data_ins -1))
-                   (limit 110)))
+                   (limit 5000)))
