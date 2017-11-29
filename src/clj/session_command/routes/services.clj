@@ -18,6 +18,8 @@
       :return {:session-id String}
       :body-params [{brand :- String nil}
                     {model :- String nil}
+                    {lat :- Double 0}
+                    {long :- Double 0}
                     {hd-id :- String nil}]
       :summary "Creates a new session"
       (let [uuid (str (java.util.UUID/randomUUID))
@@ -25,7 +27,9 @@
                                      :brand   brand
                                      :model   model
                                      :hd-id   hd-id
-                                     :uuid    uuid})]
+                                     :uuid    uuid
+                                     :lat     lat
+                                     :long    long})]
         (if (nil? (:error rtn))
           (ok {:session-id uuid})
           (bad-request "Invalid params"))))

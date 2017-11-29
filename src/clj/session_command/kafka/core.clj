@@ -4,7 +4,7 @@
             [clojure.core.async :as a]
             [jkkramer.verily :as v]))
 
-(def s-validate (v/validations->fn [[:required [:brand :model :hd-id :command :uuid]]]))
+(def s-validate (v/validations->fn [[:required [:brand :model :hd-id :command :uuid :lat :long]]]))
 (def t-validate (v/validations->fn [[:required [:session-id :gas-lvl :lat :long :vel]]]))
 (def w-validate (v/validations->fn [[:required [:session-id :action]]]))
 
